@@ -56,20 +56,24 @@ class RapidOcrModel(BaseOcrModel):
             use_dml = accelerator_options.device == AcceleratorDevice.AUTO
             intra_op_num_threads = accelerator_options.num_threads
 
+            params = {
+                "text_score": self.options.text_score,
+                "cls_use_cuda": use_cuda,
+                "rec_use_cuda": use_cuda,
+                "det_use_cuda": use_cuda,
+                "det_use_dml": use_dml,
+                "cls_use_dml": use_dml,
+                "rec_use_dml": use_dml,
+                "intra_op_num_threads": intra_op_num_threads,
+                "print_verbose": self.options.print_verbose,
+                "det_model_path": self.options.det_model_path,
+                "cls_model_path": self.options.cls_model_path,
+                "rec_model_path": self.options.rec_model_path,
+                "rec_keys_path": self.options.rec_keys_path,
+            }
+
             self.reader = RapidOCR(
-                text_score=self.options.text_score,
-                cls_use_cuda=use_cuda,
-                rec_use_cuda=use_cuda,
-                det_use_cuda=use_cuda,
-                det_use_dml=use_dml,
-                cls_use_dml=use_dml,
-                rec_use_dml=use_dml,
-                intra_op_num_threads=intra_op_num_threads,
-                print_verbose=self.options.print_verbose,
-                det_model_path=self.options.det_model_path,
-                cls_model_path=self.options.cls_model_path,
-                rec_model_path=self.options.rec_model_path,
-                rec_keys_path=self.options.rec_keys_path,
+                params=params
             )
 
     def __call__(
